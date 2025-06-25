@@ -14,7 +14,6 @@ const data = [];
 
 function asyncFunction(item) {
   return new Promise(async (resolve, reject) => {
-    await wait(2000);
     const fullPath = path.join(dir, item.name);
     if (item.isFile()) {
       const ext = path.extname(item.name);
@@ -48,23 +47,25 @@ function asyncFunction(item) {
               description: description.trim(),
             });
             resolve();
+            console.log(`Description generated for`, item.name)
           });
       }
     }
   });
 }
 
-fs.readdir(dir, { withFileTypes: true }, (err, items) => {
+fs.readdir(dir, { withFileTypes: true }, async (err, items) => {
   if (err) {
     console.error(`Error reading directory ${dir}:`, err);
     return;
   }
-  const promiseArray = items.map(asyncFunction);
-  Promise.all(promiseArray).then(() => {
-    const csv = generateCsv(mkConfig({ useKeysAsHeaders: true }))(data);
-    writeFile(exportFileName, new Uint8Array(Buffer.from(asString(csv))), (err) => {
-      if (err) throw err;
-      console.log("CSV file saved: ", exportFileName);
-    });
+  for (const item of items) {
+    await asyncFunction(item);
+    await wait(5000);
+  }
+  const csv = generateCsv(mkConfig({ useKeysAsHeaders: true }))(data);
+  writeFile(exportFileName, new Uint8Array(Buffer.from(asString(csv))), (err) => {
+    if (err) throw err;
+    console.log("CSV file saved: ", exportFileName);
   });
 });
