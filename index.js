@@ -8,6 +8,7 @@ import { Buffer } from "node:buffer";
 const exportFileName = 'data.csv'
 const imageExtensions = [".jpg", ".JPG", ".png"];
 const dir = "./images";
+const waitTime = 15000; // 15 seconds
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const data = [];
@@ -61,7 +62,7 @@ fs.readdir(dir, { withFileTypes: true }, async (err, items) => {
   }
   for (const item of items) {
     await asyncFunction(item);
-    await wait(5000);
+    await wait(waitTime);
   }
   const csv = generateCsv(mkConfig({ useKeysAsHeaders: true }))(data);
   writeFile(exportFileName, new Uint8Array(Buffer.from(asString(csv))), (err) => {
