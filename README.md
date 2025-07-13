@@ -1,7 +1,7 @@
 # image-description
 Uses third-party API to give description to images and output as CSV
 
-<a href="https://npmjs.com/loh"><img src="https://badge.fury.io/js/loh.svg"></a>
+<a href="https://npmjs.com/image-description"><img src="https://badge.fury.io/js/image-description.svg"></a>
 
 ## Notes
 - The image recognition API used is from [DocsBot.ai](https://docsbot.ai).
