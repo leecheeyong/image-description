@@ -1,6 +1,22 @@
 {
+  "name": "image-description",
+  "version": "1.0.0",
+  "bin": {
+    "image-description": "index.js"
+  },
+  "description": "Uses third-party API to give description to images and output as CSV",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leecheeyong/image-description.git"
+  },
+  "author": "Lee Chee Yong <tojoeleeofficial@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/leecheeyong/image-description/issues"
+  },
+  "homepage": "https://github.com/leecheeyong/image-description#readme",
   "dependencies": {
     "export-to-csv": "^1.4.0",
+    "minimist": "^1.2.8",
     "node-fetch": "^3.3.2"
   },
   "type": "module"

@@ -1,17 +1,42 @@
+#! /usr/bin/env node
+"use strict";
+
 import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
+import minimist from "minimist";
 import { mkConfig, generateCsv, asString } from "export-to-csv";
 import { writeFile } from "node:fs";
 import { Buffer } from "node:buffer";
 
-const exportFileName = 'data.csv'
+var args = minimist(process.argv.slice(2));
+const exportFileName = args["o"] || args["output"] || "image_descriptions.csv";
 const imageExtensions = [".jpg", ".JPG", ".png"];
-const dir = "./images";
-const waitTime = 15000; // 15 seconds
+const dir = args["d"] || args["dir"] || "./images";
+const waitTime = args["w"] || args["wait"] || 30000; 
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const data = [];
+
+if (Object.keys(args).length === 1 || (args["h"] || args["help"])) {
+  console.log(`
+  Usage: image-description [options]
+  Options:
+    -d, --dir <directory>   Directory containing images (default: ./images)
+    -o, --output <file>     Output CSV file name (default: image_descriptions.csv)
+    -w, --wait <ms>         Wait time between requests in milliseconds (default: 30000)
+    -h, --help              Show this help message
+    
+  Example: image-description -d ./images -o descriptions.csv -w 15000
+  Repository: https://github.com/leecheeyong/image-description
+    `);
+  process.exit(1);
+}
+
+if(!fs.existsSync(dir)) {
+  console.error(`Directory ${dir} does not exist.`);
+  process.exit(1);
+}
 
 function asyncFunction(item) {
   return new Promise(async (resolve, reject) => {
